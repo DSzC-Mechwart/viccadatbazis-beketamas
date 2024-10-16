@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using ViccAdatbazis.Data;
 using ViccAdatbazis.Models;
 
@@ -93,13 +95,14 @@ namespace ViccAdatbazis.Controllers
             vicc.Tetszik++;
             _context.Entry(vicc).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-            return Ok($"tdb: {vicc.Tetszik}");
+            
+            return Ok(vicc.Tetszik);
         }
 
         [Route("{id}/dislike")]
         [HttpPatch("{id}")]
 
-        public async Task<ActionResult> NemTetszik(int id)
+        public async Task<ActionResult<string>> NemTetszik(int id)
         {
             var vicc = _context.Viccek.Find(id);
             if (vicc == null)
@@ -108,7 +111,11 @@ namespace ViccAdatbazis.Controllers
             vicc.NemTetszik++;
             _context.Entry(vicc).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-            return NoContent();
+            var valasz = new
+            {
+                tdb = vicc.NemTetszik
+            };
+            return Ok(vicc.NemTetszik);
         }
 
     }

@@ -8,13 +8,29 @@ function lajkolas(id) {
 
     ajaxKeres.withCredentials = true;
 
-    ajaxKeres.addEventListener("readystatechange", () => {
+    ajaxKeres.addEventListener("readystatechange", function(){
         if (this.readyState === 4) {
             console.log(this.responseText);
-            document.getElementById("tetszikDb").innerHTML = Tetszik();
+            document.getElementById("tetszikDb-"+id).innerHTML = this.responseText;
         }
     })
 
-    ajaxKeres.open("PATCH", "https://localhost:7193/api/NapiVicc")
+    ajaxKeres.open("PATCH", "https://localhost:7193/api/NapiViccek/" + id + "/like")
+    ajaxKeres.send();
+}
+
+function dislajkolas(id) {
+    var ajaxKeres = new XMLHttpRequest();
+
+    ajaxKeres.withCredentials = true;
+
+    ajaxKeres.addEventListener("readystatechange", function(){
+        if (this.readyState === 4) {
+            console.log(this.responseText);
+            document.getElementById("nemTetszikDb-"+id).innerHTML = this.responseText;
+        }
+    })
+
+    ajaxKeres.open("PATCH", "https://localhost:7193/api/NapiViccek/" + id + "/dislike")
     ajaxKeres.send();
 }
